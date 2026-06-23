@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Cocina - GastroSystem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+</head>
+<body class="bg-dark text-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg gastro-nav navbar-dark bg-secondary">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/cocina}">GastroSystem - Cocina</a>
+        <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item">
+                    <span class="nav-link active me-3">Monitor en Tiempo Real</span>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-sm btn-outline-light">Cerrar Sesión</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container dashboard-container animate-fade-in">
+    <div class="row mb-4 text-center text-md-start">
+        <div class="col-12">
+            <h1 class="h3 mb-1 text-light">Pedidos Pendientes de Preparación</h1>
+            <p class="text-muted">Ordenados cronológicamente. Cambia el estado de los platos conforme avances en cocina.</p>
+        </div>
+    </div>
+
+    <!-- Empty kitchen state -->
+    <div th:if="${pedidos.isEmpty()}" class="row justify-content-center my-5">
+        <div class="col-md-6 text-center py-5 rounded-4 bg-secondary-subtle bg-opacity-10">
+            <h3 class="h5 mb-2">¡Todo al día en cocina!</h3>
+            <p class="text-muted mb-0">No hay pedidos pendientes por ahora.</p>
+        </div>
+    </div>
+
+    <!-- Kitchen Cards Grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${!pedidos.isEmpty()}">
+        <div class="col" th:each="pedido : ${pedidos}">
+            <div class="card h-100 border-0 rounded-4 text-dark shadow-sm bg-white"
+                 th:classappend="${pedido.estado.name() == 'EN_PREPARACION' ? 'border-start border-5 border-warning' : 'border-start border-5 border-secondary'}">
+                
+                <div class="card-header bg-white border-0 pt-3 px-3 pb-0 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="h5 mb-0 font-bold" th:text="'Pedido #' + ${pedido.idPedido}">Pedido #1</h2>
+                        <small class="text-muted" th:text="${#temporals.format(pedido.fechaPedido, 'HH:mm')}">12:30</small>
+                    </div>
+                    <div>
+                        <span th:if="${pedido.tipoPedido.name() == 'MESA'}" class="badge bg-primary px-2 py-1" 
+                              th:text="'Mesa ' + ${pedido.mesa.numero}">Mesa 3</span>
+                        <span th:if="${pedido.tipoPedido.name() == 'DOMICILIO'}" class="badge bg-info text-dark px-2 py-1">Domicilio</span>
+                    </div>
+                </div>
+
+                <div class="card-body px-3 py-3">
+                    <h6 class="text-muted text-uppercase small font-bold border-bottom pb-2 mb-2">Platos</h6>
+                    
+                    <!-- Dishes list -->
+                    <ul class="list-group list-group-flush mb-4">
+                        <li th:each="detalle : ${pedido.detalles}" class="list-group-item px-0 py-2 bg-transparent d-flex justify-content-between">
+                            <div>
+                                <strong class="fs-5 text-primary" th:text="${detalle.cantidad} + 'x'">1x</strong>
+                                <span class="fw-semibold ms-1" th:text="${detalle.plato.nombre}">Nombre Plato</span>
+                            </div>
+                            <span class="badge bg-light text-dark text-capitalize small" th:text="${detalle.plato.categoria.nombre.toLowerCase()}">Categoría</span>
+                        </li>
+                    </ul>
+
+                    <!-- Action buttons -->
+                    <div class="mt-auto">
+                        <form th:if="${pedido.estado.name() == 'RECIBIDO'}" th:action="@{/cocina/pedido/{id}/preparar(id=${pedido.idPedido})}" method="post">
+                            <button type="submit" class="btn btn-warning w-100 py-2 fw-semibold">Comenzar Preparación</button>
+                        </form>
+                        
+                        <form th:if="${pedido.estado.name() == 'EN_PREPARACION'}" th:action="@{/cocina/pedido/{id}/listo(id=${pedido.idPedido})}" method="post">
+                            <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">Marcar como Listo</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

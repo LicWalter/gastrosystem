@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Menú - GastroSystem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg gastro-nav navbar-dark px-3">
+    <a class="navbar-brand fw-bold" th:href="@{/admin}">🍽 GastroSystem — Admin</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin}">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link active" th:href="@{/admin/menu}">Menú</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin/mesas}">Mesas</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin/usuarios}">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin/reservas}">Reservas</a></li>
+        </ul>
+        <form th:action="@{/logout}" method="post" class="ms-3">
+            <button type="submit" class="btn btn-sm btn-outline-light">Cerrar Sesión</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container dashboard-container animate-fade-in">
+    <!-- Alerts -->
+    <div th:if="${param.categoriaSuccess}" class="alert alert-success alert-dismissible fade show">Categoría guardada correctamente. <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+    <div th:if="${param.platoSuccess}" class="alert alert-success alert-dismissible fade show">Plato guardado correctamente. <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 gastro-title mb-1">Gestión del Menú</h1>
+            <p class="text-muted">Administra categorías y platos disponibles para el restaurante.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left: Categories + Add Category Form -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm p-4 rounded-4 bg-white mb-4">
+                <h2 class="h5 mb-4 gastro-title">Categorías</h2>
+                <ul class="list-group list-group-flush mb-4">
+                    <li th:each="cat : ${categorias}" class="list-group-item px-0 d-flex justify-content-between">
+                        <span class="fw-semibold" th:text="${cat.nombre}">Categoría</span>
+                        <span class="text-muted small" th:text="${cat.descripcion}">Desc.</span>
+                    </li>
+                    <li th:if="${categorias.isEmpty()}" class="list-group-item px-0 text-muted">Sin categorías aún.</li>
+                </ul>
+
+                <hr class="my-3">
+                <h3 class="h6 mb-3">Nueva Categoría</h3>
+                <form th:action="@{/admin/menu/categoria/guardar}" th:object="${nuevaCategoria}" method="post">
+                    <div class="mb-2">
+                        <input type="text" class="form-control" th:field="*{nombre}" placeholder="Nombre (ej. ENTRADAS)" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" th:field="*{descripcion}" placeholder="Descripción breve">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-gastro-primary">Agregar Categoría</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right: Dishes List + Add Dish Form -->
+        <div class="col-lg-8">
+            <!-- Dishes Table -->
+            <div class="card border-0 shadow-sm p-4 rounded-4 bg-white mb-4">
+                <h2 class="h5 mb-4 gastro-title">Platos del Menú</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle table-interactive">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Descripción</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:if="${platos.isEmpty()}">
+                                <td colspan="6" class="text-center py-4 text-muted">No hay platos registrados aún.</td>
+                            </tr>
+                            <tr th:each="plato : ${platos}">
+                                <td class="fw-semibold" th:text="${plato.nombre}">Plato</td>
+                                <td>
+                                    <span class="badge bg-secondary" th:text="${plato.categoria.nombre}">Cat.</span>
+                                </td>
+                                <td class="text-primary fw-bold" th:text="'$' + ${#numbers.formatDecimal(plato.precio, 1, 2)}">$0.00</td>
+                                <td class="text-muted small" th:text="${plato.descripcion != null ? plato.descripcion : '-'}">-</td>
+                                <td class="text-center">
+                                    <span th:if="${plato.activo}" class="badge bg-success">Activo</span>
+                                    <span th:if="${!plato.activo}" class="badge bg-danger">Inactivo</span>
+                                </td>
+                                <td class="text-center">
+                                    <form th:action="@{/admin/menu/plato/{id}/toggle(id=${plato.idPlato})}" method="post">
+                                        <input type="hidden" name="activo" th:value="${!plato.activo}">
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary py-0 px-2"
+                                                th:text="${plato.activo ? 'Desactivar' : 'Activar'}">Toggle</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Add Dish Form -->
+            <div class="card border-0 shadow-sm p-4 rounded-4 bg-white">
+                <h3 class="h5 mb-4 gastro-title">Agregar Nuevo Plato</h3>
+                <form th:action="@{/admin/menu/plato/guardar}" th:object="${nuevoPlato}" method="post">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nombre del Plato</label>
+                            <input type="text" class="form-control" th:field="*{nombre}" placeholder="Ej. Bandeja Paisa" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Precio</label>
+                            <input type="number" class="form-control" th:field="*{precio}" step="0.01" min="0" placeholder="25000.00" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Categoría</label>
+                            <select class="form-select" name="idCategoria" required>
+                                <option value="" disabled selected>Selecciona...</option>
+                                <option th:each="cat : ${categorias}" th:value="${cat.idCategoria}" th:text="${cat.nombre}">Cat.</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control" th:field="*{descripcion}" placeholder="Descripción breve del plato">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-gastro-primary px-5">Guardar Plato</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

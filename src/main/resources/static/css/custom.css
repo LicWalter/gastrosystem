@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #f75c03;
+    --primary-hover: #d44c02;
+    --primary-light: #fef0e6;
+    --secondary-color: #2b2d42;
+    --bg-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --text-main: #2b2d42;
+    --text-muted: #6c757d;
+    --accent-color: #ffb703;
+    --success-color: #2ec4b6;
+    --danger-color: #e63946;
+    --font-family: 'Outfit', sans-serif;
+    --border-radius-sm: 8px;
+    --border-radius-md: 16px;
+    --border-radius-lg: 24px;
+    --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --box-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.gastro-card {
+    background: var(--card-bg);
+    border: none;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.gastro-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow-hover);
+}
+
+.btn-gastro-primary {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-gastro-primary:hover {
+    background-color: var(--primary-hover);
+    color: #fff;
+    transform: scale(1.02);
+}
+
+.btn-gastro-secondary {
+    background-color: var(--secondary-color);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-gastro-secondary:hover {
+    background-color: #1a1b2a;
+    color: #fff;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(247, 92, 3, 0.15);
+}
+
+.gastro-title {
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.gastro-nav {
+    background-color: var(--secondary-color);
+    box-shadow: var(--box-shadow);
+}
+
+.gastro-nav .navbar-brand {
+    font-weight: 700;
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.gastro-nav .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.gastro-nav .nav-link:hover, .gastro-nav .nav-link.active {
+    color: var(--accent-color);
+}
+
+/* Badge Styles */
+.badge-disponible { background-color: var(--success-color); color: #fff; }
+.badge-ocupada { background-color: var(--danger-color); color: #fff; }
+.badge-reservada { background-color: var(--accent-color); color: #2b2d42; }
+
+/* Dashboard layout */
+.dashboard-container {
+    padding: 2rem 0;
+    flex-grow: 1;
+}
+
+/* Micro-animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.table-interactive tbody tr {
+    transition: var(--transition);
+}
+
+.table-interactive tbody tr:hover {
+    background-color: var(--primary-light);
+    cursor: pointer;
+}
+
+/* Floating Elements */
+.gastro-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    font-weight: 600;
+}
