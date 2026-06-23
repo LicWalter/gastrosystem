@@ -79,9 +79,9 @@
                                 <td class="text-center fw-bold fs-5" th:text="${mesa.numero}">1</td>
                                 <td class="text-center" th:text="${mesa.capacidad} + ' personas'">4 personas</td>
                                 <td class="text-center">
-                                    <span th:if="${mesa.estado.name() == 'DISPONIBLE'}" class="badge badge-disponible px-3 py-2">Disponible</span>
-                                    <span th:if="${mesa.estado.name() == 'OCUPADA'}" class="badge badge-ocupada px-3 py-2">Ocupada</span>
-                                    <span th:if="${mesa.estado.name() == 'RESERVADA'}" class="badge badge-reservada px-3 py-2">Reservada</span>
+                                    <span th:if="${#strings.toString(mesa.estado) == 'DISPONIBLE'}" class="badge badge-disponible px-3 py-2">Disponible</span>
+                                    <span th:if="${#strings.toString(mesa.estado) == 'OCUPADA'}" class="badge badge-ocupada px-3 py-2">Ocupada</span>
+                                    <span th:if="${#strings.toString(mesa.estado) == 'RESERVADA'}" class="badge badge-reservada px-3 py-2">Reservada</span>
                                 </td>
                                 <td class="text-center">
                                     <form th:action="@{/admin/mesas/{id}/eliminar(id=${mesa.idMesa})}" method="post"

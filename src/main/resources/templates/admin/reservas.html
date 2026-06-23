@@ -67,19 +67,19 @@
                             <span th:if="${reserva.mesa == null}" class="text-muted small">Sin asignar</span>
                         </td>
                         <td class="text-center">
-                            <span th:if="${reserva.estado.name() == 'PENDIENTE'}" class="badge bg-warning text-dark">Pendiente</span>
-                            <span th:if="${reserva.estado.name() == 'CONFIRMADA'}" class="badge bg-success">Confirmada</span>
-                            <span th:if="${reserva.estado.name() == 'CANCELADA'}" class="badge bg-danger">Cancelada</span>
+                            <span th:if="${#strings.toString(reserva.estado) == 'PENDIENTE'}" class="badge bg-warning text-dark">Pendiente</span>
+                            <span th:if="${#strings.toString(reserva.estado) == 'CONFIRMADA'}" class="badge bg-success">Confirmada</span>
+                            <span th:if="${#strings.toString(reserva.estado) == 'CANCELADA'}" class="badge bg-danger">Cancelada</span>
                         </td>
                         <td class="text-center">
                             <!-- Actions only for active reservations -->
-                            <div th:if="${reserva.estado.name() != 'CANCELADA'}" class="d-flex gap-1 justify-content-center flex-wrap">
+                            <div th:if="${#strings.toString(reserva.estado) != 'CANCELADA'}" class="d-flex gap-1 justify-content-center flex-wrap">
                                 <!-- Confirm -->
-                                <form th:if="${reserva.estado.name() == 'PENDIENTE'}" th:action="@{/admin/reservas/{id}/confirmar(id=${reserva.idReserva})}" method="post">
+                                <form th:if="${#strings.toString(reserva.estado) == 'PENDIENTE'}" th:action="@{/admin/reservas/{id}/confirmar(id=${reserva.idReserva})}" method="post">
                                     <button type="submit" class="btn btn-sm btn-success py-0 px-2">Confirmar</button>
                                 </form>
                                 <!-- Assign Mesa -->
-                                <div th:if="${reserva.estado.name() != 'CANCELADA'}" class="d-flex gap-1 align-items-center">
+                                <div th:if="${#strings.toString(reserva.estado) != 'CANCELADA'}" class="d-flex gap-1 align-items-center">
                                     <form th:action="@{/admin/reservas/{id}/asignar-mesa(id=${reserva.idReserva})}" method="post" class="d-flex gap-1">
                                         <select name="idMesa" class="form-select form-select-sm py-0" style="width:100px;">
                                             <option value="">Sin mesa</option>
@@ -96,7 +96,7 @@
                                     <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-2">Cancelar</button>
                                 </form>
                             </div>
-                            <span th:if="${reserva.estado.name() == 'CANCELADA'}" class="text-muted small">—</span>
+                            <span th:if="${#strings.toString(reserva.estado) == 'CANCELADA'}" class="text-muted small">—</span>
                         </td>
                     </tr>
                 </tbody>

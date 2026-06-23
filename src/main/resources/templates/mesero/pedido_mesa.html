@@ -39,12 +39,12 @@
                         <p class="text-muted mb-0" th:text="'Pedido #' + ${pedido.idPedido} + ' | Atendido por ' + ${pedido.mesero.nombre}">Pedido #0</p>
                     </div>
                     <div>
-                        <span th:if="${pedido.estado.name() == 'RECIBIDO'}" class="badge bg-secondary fs-6 py-2 px-3">Recibido</span>
-                        <span th:if="${pedido.estado.name() == 'EN_PREPARACION'}" class="badge bg-warning text-dark fs-6 py-2 px-3">En Preparación</span>
-                        <span th:if="${pedido.estado.name() == 'LISTO'}" class="badge bg-info text-dark fs-6 py-2 px-3">Listo en Cocina</span>
-                        <span th:if="${pedido.estado.name() == 'ENTREGADO'}" class="badge bg-primary fs-6 py-2 px-3">Entregado</span>
-                        <span th:if="${pedido.estado.name() == 'PAGADO'}" class="badge bg-success fs-6 py-2 px-3">Pagado</span>
-                        <span th:if="${pedido.estado.name() == 'CANCELADO'}" class="badge bg-danger fs-6 py-2 px-3">Cancelado</span>
+                        <span th:if="${#strings.toString(pedido.estado) == 'RECIBIDO'}" class="badge bg-secondary fs-6 py-2 px-3">Recibido</span>
+                        <span th:if="${#strings.toString(pedido.estado) == 'EN_PREPARACION'}" class="badge bg-warning text-dark fs-6 py-2 px-3">En Preparación</span>
+                        <span th:if="${#strings.toString(pedido.estado) == 'LISTO'}" class="badge bg-info text-dark fs-6 py-2 px-3">Listo en Cocina</span>
+                        <span th:if="${#strings.toString(pedido.estado) == 'ENTREGADO'}" class="badge bg-primary fs-6 py-2 px-3">Entregado</span>
+                        <span th:if="${#strings.toString(pedido.estado) == 'PAGADO'}" class="badge bg-success fs-6 py-2 px-3">Pagado</span>
+                        <span th:if="${#strings.toString(pedido.estado) == 'CANCELADO'}" class="badge bg-danger fs-6 py-2 px-3">Cancelado</span>
                     </div>
                 </div>
 
@@ -53,25 +53,25 @@
                     <span class="font-semibold text-muted">Acciones de Estado:</span>
                     <div class="d-flex gap-2">
                         <!-- Enviar a preparación (de recibido a preparacion) -->
-                        <form th:if="${pedido.estado.name() == 'RECIBIDO'}" th:action="@{/mesero/pedido/ver/{id}/cambiar-estado(id=${pedido.idPedido})}" method="post">
+                        <form th:if="${#strings.toString(pedido.estado) == 'RECIBIDO'}" th:action="@{/mesero/pedido/ver/{id}/cambiar-estado(id=${pedido.idPedido})}" method="post">
                             <input type="hidden" name="estado" value="EN_PREPARACION">
                             <button type="submit" class="btn btn-sm btn-warning">Enviar a Cocina</button>
                         </form>
                         
                         <!-- Listo (si se salta a listo, o para cocina) -->
-                        <form th:if="${pedido.estado.name() == 'EN_PREPARACION'}" th:action="@{/mesero/pedido/ver/{id}/cambiar-estado(id=${pedido.idPedido})}" method="post">
+                        <form th:if="${#strings.toString(pedido.estado) == 'EN_PREPARACION'}" th:action="@{/mesero/pedido/ver/{id}/cambiar-estado(id=${pedido.idPedido})}" method="post">
                             <input type="hidden" name="estado" value="LISTO">
                             <button type="submit" class="btn btn-sm btn-info text-dark">Listo en Cocina</button>
                         </form>
 
                         <!-- Entregar (de listo a entregado) -->
-                        <form th:if="${pedido.estado.name() == 'LISTO'}" th:action="@{/mesero/pedido/ver/{id}/cambiar-estado(id=${pedido.idPedido})}" method="post">
+                        <form th:if="${#strings.toString(pedido.estado) == 'LISTO'}" th:action="@{/mesero/pedido/ver/{id}/cambiar-estado(id=${pedido.idPedido})}" method="post">
                             <input type="hidden" name="estado" value="ENTREGADO">
                             <button type="submit" class="btn btn-sm btn-primary">Marcar como Entregado</button>
                         </form>
 
                         <!-- Cancelar Pedido -->
-                        <form th:if="${pedido.estado.name() != 'PAGADO' && pedido.estado.name() != 'CANCELADO'}" th:action="@{/mesero/pedido/ver/{id}/cambiar-estado(id=${pedido.idPedido})}" method="post" 
+                        <form th:if="${#strings.toString(pedido.estado) != 'PAGADO' && #strings.toString(pedido.estado) != 'CANCELADO'}" th:action="@{/mesero/pedido/ver/{id}/cambiar-estado(id=${pedido.idPedido})}" method="post" 
                               onsubmit="return confirm('¿Seguro que desea cancelar este pedido? Esto liberará la mesa.');">
                             <input type="hidden" name="estado" value="CANCELADO">
                             <button type="submit" class="btn btn-sm btn-outline-danger">Cancelar Pedido</button>
@@ -82,7 +82,7 @@
                 <!-- Add Dishes Button -->
                 <div class="mb-4 d-flex justify-content-between align-items-center">
                     <h5 class="h6 font-semibold mb-0">Detalle de Consumos</h5>
-                    <a th:if="${pedido.estado.name() != 'PAGADO' && pedido.estado.name() != 'CANCELADO'}" 
+                    <a th:if="${#strings.toString(pedido.estado) != 'PAGADO' && #strings.toString(pedido.estado) != 'CANCELADO'}" 
                        th:href="@{/mesero/pedido/ver/{id}/agregar(id=${pedido.idPedido})}" 
                        class="btn btn-sm btn-gastro-primary">
                         + Agregar Plato
@@ -98,7 +98,7 @@
                                 <th class="text-center">Precio Unitario</th>
                                 <th class="text-center">Cantidad</th>
                                 <th class="text-end">Subtotal</th>
-                                <th class="text-center" style="width: 50px;" th:if="${pedido.estado.name() != 'PAGADO' && pedido.estado.name() != 'CANCELADO'}">Eliminar</th>
+                                <th class="text-center" style="width: 50px;" th:if="${#strings.toString(pedido.estado) != 'PAGADO' && #strings.toString(pedido.estado) != 'CANCELADO'}">Eliminar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,7 +110,7 @@
                                 <td class="text-center" th:text="'$' + ${#numbers.formatDecimal(detalle.precioUnitario, 1, 2)}">$0.00</td>
                                 <td class="text-center" th:text="${detalle.cantidad}">1</td>
                                 <td class="text-end fw-semibold" th:text="'$' + ${#numbers.formatDecimal(detalle.subtotal, 1, 2)}">$0.00</td>
-                                <td class="text-center" th:if="${pedido.estado.name() != 'PAGADO' && pedido.estado.name() != 'CANCELADO'}">
+                                <td class="text-center" th:if="${#strings.toString(pedido.estado) != 'PAGADO' && #strings.toString(pedido.estado) != 'CANCELADO'}">
                                     <form th:action="@{/mesero/pedido/ver/{id}/remover/{idDetalle}(id=${pedido.idPedido}, idDetalle=${detalle.idDetalle})}" method="post">
                                         <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-2">&times;</button>
                                     </form>
@@ -120,15 +120,15 @@
                         <tfoot>
                             <tr>
                                 <th colspan="3" class="text-end">Total Cuenta:</th>
-                                <th class="text-end text-primary fs-5" th:text="'$' + ${#numbers.formatDecimal(pedido.total, 1, 2)}">$0.00</th>
-                                <th th:if="${pedido.estado.name() != 'PAGADO' && pedido.estado.name() != 'CANCELADO'}"></th>
+                                <th class="text-end text-primary fs-5" th:text="${pedido.total != null ? '$' + #numbers.formatDecimal(pedido.total, 1, 2) : '$0.00'}">$0.00</th>
+                                <th th:if="${#strings.toString(pedido.estado) != 'PAGADO' && #strings.toString(pedido.estado) != 'CANCELADO'}"></th>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
 
                 <!-- Billing & Closure (Visible if not paid or cancelled, and total > 0) -->
-                <div th:if="${pedido.estado.name() != 'PAGADO' && pedido.estado.name() != 'CANCELADO' && pedido.total.compareTo(T(java.math.BigDecimal).ZERO) > 0}" 
+                <div th:if="${#strings.toString(pedido.estado) != 'PAGADO' && #strings.toString(pedido.estado) != 'CANCELADO' && pedido.total != null && pedido.total.compareTo(T(java.math.BigDecimal).ZERO) > 0}" 
                      class="card p-4 border-0 bg-light rounded-4 mt-5">
                     <h5 class="h6 mb-3 font-semibold gastro-title text-secondary">Cierre de Cuenta y Pago</h5>
                     

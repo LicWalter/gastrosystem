@@ -82,15 +82,15 @@
                     
                     <div class="step-indicator">
                         <!-- Recibido -->
-                        <div class="step" th:classappend="${pedido.estado.name() == 'RECIBIDO' ? 'active' : (pedido.estado.name() != 'CANCELADO' ? 'completed' : '')}" title="Recibido">R</div>
+                        <div class="step" th:classappend="${#strings.toString(pedido.estado) == 'RECIBIDO' ? 'active' : (#strings.toString(pedido.estado) != 'CANCELADO' && #strings.toString(pedido.estado) != 'CANCELADA' ? 'completed' : '')}" title="Recibido">R</div>
                         <!-- En preparacion -->
-                        <div class="step" th:classappend="${pedido.estado.name() == 'EN_PREPARACION' ? 'active' : (pedido.estado.name() != 'RECIBIDO' && pedido.estado.name() != 'CANCELADO' ? 'completed' : '')}" title="En preparación">P</div>
+                        <div class="step" th:classappend="${#strings.toString(pedido.estado) == 'EN_PREPARACION' ? 'active' : (#strings.toString(pedido.estado) != 'RECIBIDO' && #strings.toString(pedido.estado) != 'CANCELADO' && #strings.toString(pedido.estado) != 'CANCELADA' ? 'completed' : '')}" title="En preparación">P</div>
                         <!-- Listo -->
-                        <div class="step" th:classappend="${pedido.estado.name() == 'LISTO' ? 'active' : (pedido.estado.name() == 'ENTREGADO' || pedido.estado.name() == 'PAGADO' ? 'completed' : '')}" title="Listo">L</div>
+                        <div class="step" th:classappend="${#strings.toString(pedido.estado) == 'LISTO' ? 'active' : (#strings.toString(pedido.estado) == 'ENTREGADO' || #strings.toString(pedido.estado) == 'PAGADO' ? 'completed' : '')}" title="Listo">L</div>
                         <!-- Entregado -->
-                        <div class="step" th:classappend="${pedido.estado.name() == 'ENTREGADO' ? 'active' : (pedido.estado.name() == 'PAGADO' ? 'completed' : '')}" title="Entregado">E</div>
+                        <div class="step" th:classappend="${#strings.toString(pedido.estado) == 'ENTREGADO' ? 'active' : (#strings.toString(pedido.estado) == 'PAGADO' ? 'completed' : '')}" title="Entregado">E</div>
                         <!-- Pagado -->
-                        <div class="step" th:classappend="${pedido.estado.name() == 'PAGADO' ? 'completed' : ''}" title="Pagado">$</div>
+                        <div class="step" th:classappend="${#strings.toString(pedido.estado) == 'PAGADO' ? 'completed' : ''}" title="Pagado">$</div>
                     </div>
 
                     <div class="text-center">
@@ -119,7 +119,7 @@
                             <h5 class="h6 font-semibold">Resumen de Facturación</h5>
                             <p class="mb-1">Tipo: <strong th:text="${pedido.tipoPedido}">DOMICILIO</strong></p>
                             <p class="mb-1" th:if="${pedido.pago != null}">Método: <strong th:text="${pedido.pago.metodoPago}">Metodo</strong></p>
-                            <p class="mb-0 text-primary fw-bold" th:text="'Monto: $' + ${#numbers.formatDecimal(pedido.total, 1, 2)}">Monto</p>
+                            <p class="mb-0 text-primary fw-bold" th:text="'Monto: ' + ${pedido.total != null ? '$' + #numbers.formatDecimal(pedido.total, 1, 2) : '$0.00'}">Monto</p>
                         </div>
                     </div>
                 </div>
@@ -141,13 +141,13 @@
                                 <td th:text="${detalle.plato.nombre}">Plato</td>
                                 <td class="text-center" th:text="'$' + ${#numbers.formatDecimal(detalle.precioUnitario, 1, 2)}">$0.00</td>
                                 <td class="text-center" th:text="${detalle.cantidad}">1</td>
-                                <td class="text-end fw-semibold" th:text="'$' + ${#numbers.formatDecimal(detalle.subtotal, 1, 2)}">$0.00</td>
+                                <td class="text-end fw-semibold" th:text="${detalle.subtotal != null ? '$' + #numbers.formatDecimal(detalle.subtotal, 1, 2) : '$0.00'}">$0.00</td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th colspan="3" class="text-end">Total Pedido:</th>
-                                <th class="text-end text-primary fs-5" th:text="'$' + ${#numbers.formatDecimal(pedido.total, 1, 2)}">$0.00</th>
+                                <th class="text-end text-primary fs-5" th:text="${pedido.total != null ? '$' + #numbers.formatDecimal(pedido.total, 1, 2) : '$0.00'}">$0.00</th>
                             </tr>
                         </tfoot>
                     </table>

@@ -47,38 +47,38 @@
             <!-- Determine active order -->
             <div th:with="pedidoActivo=${pedidoService.obtenerPedidoActivoMesa(mesa.idMesa)}">
                 <div class="card gastro-card h-100 border-0 shadow-sm rounded-4 text-center p-3" 
-                     th:classappend="${mesa.estado.name() == 'DISPONIBLE' ? 'border-top border-5 border-success' : 
-                                      (mesa.estado.name() == 'OCUPADA' ? 'border-top border-5 border-danger' : 'border-top border-5 border-warning')}">
+                     th:classappend="${#strings.toString(mesa.estado) == 'DISPONIBLE' ? 'border-top border-5 border-success' : 
+                                      (#strings.toString(mesa.estado) == 'OCUPADA' ? 'border-top border-5 border-danger' : 'border-top border-5 border-warning')}">
                     
                     <div class="card-body">
                         <h2 class="card-title h3 font-bold mb-1" th:text="'Mesa ' + ${mesa.numero}">Mesa 1</h2>
                         <p class="text-muted small mb-3" th:text="'Capacidad: ' + ${mesa.capacidad} + ' pers.'">Capacidad: 4 pers.</p>
                         
                         <div class="mb-4">
-                            <span th:if="${mesa.estado.name() == 'DISPONIBLE'}" class="badge badge-disponible px-3 py-2">Disponible</span>
-                            <span th:if="${mesa.estado.name() == 'OCUPADA'}" class="badge badge-ocupada px-3 py-2">Ocupada</span>
-                            <span th:if="${mesa.estado.name() == 'RESERVADA'}" class="badge badge-reservada px-3 py-2">Reservada</span>
+                            <span th:if="${#strings.toString(mesa.estado) == 'DISPONIBLE'}" class="badge badge-disponible px-3 py-2">Disponible</span>
+                            <span th:if="${#strings.toString(mesa.estado) == 'OCUPADA'}" class="badge badge-ocupada px-3 py-2">Ocupada</span>
+                            <span th:if="${#strings.toString(mesa.estado) == 'RESERVADA'}" class="badge badge-reservada px-3 py-2">Reservada</span>
                         </div>
 
                         <!-- Actions based on state -->
-                        <div th:if="${mesa.estado.name() == 'DISPONIBLE' || mesa.estado.name() == 'RESERVADA'}">
+                        <div th:if="${#strings.toString(mesa.estado) == 'DISPONIBLE' || #strings.toString(mesa.estado) == 'RESERVADA'}">
                             <form th:action="@{/mesero/pedido/abrir}" method="post">
                                 <input type="hidden" name="idMesa" th:value="${mesa.idMesa}">
                                 <button type="submit" class="btn btn-gastro-primary w-100">Abrir Pedido</button>
                             </form>
                         </div>
 
-                        <div th:if="${mesa.estado.name() == 'OCUPADA' && pedidoActivo != null}">
+                        <div th:if="${#strings.toString(mesa.estado) == 'OCUPADA' && pedidoActivo != null}">
                             <div class="d-grid gap-2">
                                 <a th:href="@{/mesero/pedido/ver/{id}(id=${pedidoActivo.idPedido})}" class="btn btn-gastro-secondary">
                                     Ver Pedido
                                 </a>
-                                <div class="text-primary fw-bold mt-1" th:text="'$' + ${#numbers.formatDecimal(pedidoActivo.total, 1, 2)}">$0.00</div>
+                                <div class="text-primary fw-bold mt-1" th:text="${pedidoActivo.total != null ? '$' + #numbers.formatDecimal(pedidoActivo.total, 1, 2) : '$0.00'}">$0.00</div>
                                 <div class="small text-muted" th:text="'Estado: ' + ${pedidoActivo.estado}">RECIBIDO</div>
                             </div>
                         </div>
 
-                        <div th:if="${mesa.estado.name() == 'OCUPADA' && pedidoActivo == null}">
+                        <div th:if="${#strings.toString(mesa.estado) == 'OCUPADA' && pedidoActivo == null}">
                             <!-- Safe fallback if DB state is desynced -->
                             <form th:action="@{/mesero/pedido/abrir}" method="post">
                                 <input type="hidden" name="idMesa" th:value="${mesa.idMesa}">

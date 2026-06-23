@@ -43,6 +43,10 @@ public class PedidoService {
         return pedidoRepository.findById(id);
     }
 
+    public Optional<Pedido> buscarPorIdConDetalles(Long id) {
+        return pedidoRepository.findByIdWithDetalles(id);
+    }
+
     public List<Pedido> listarPorCliente(Long idCliente) {
         return pedidoRepository.findByClienteIdUsuarioOrderByFechaPedidoDesc(idCliente);
     }

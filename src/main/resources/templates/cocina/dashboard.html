@@ -48,17 +48,17 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${!pedidos.isEmpty()}">
         <div class="col" th:each="pedido : ${pedidos}">
             <div class="card h-100 border-0 rounded-4 text-dark shadow-sm bg-white"
-                 th:classappend="${pedido.estado.name() == 'EN_PREPARACION' ? 'border-start border-5 border-warning' : 'border-start border-5 border-secondary'}">
+                 th:classappend="${#strings.toString(pedido.estado) == 'EN_PREPARACION' ? 'border-start border-5 border-warning' : 'border-start border-5 border-secondary'}">
                 
                 <div class="card-header bg-white border-0 pt-3 px-3 pb-0 d-flex justify-content-between align-items-center">
                     <div>
                         <h2 class="h5 mb-0 font-bold" th:text="'Pedido #' + ${pedido.idPedido}">Pedido #1</h2>
-                        <small class="text-muted" th:text="${#temporals.format(pedido.fechaPedido, 'HH:mm')}">12:30</small>
+                        <small class="text-muted" th:text="${pedido.fechaPedido != null ? #temporals.format(pedido.fechaPedido, 'HH:mm') : ''}">12:30</small>
                     </div>
                     <div>
-                        <span th:if="${pedido.tipoPedido.name() == 'MESA'}" class="badge bg-primary px-2 py-1" 
-                              th:text="'Mesa ' + ${pedido.mesa.numero}">Mesa 3</span>
-                        <span th:if="${pedido.tipoPedido.name() == 'DOMICILIO'}" class="badge bg-info text-dark px-2 py-1">Domicilio</span>
+                        <span th:if="${#strings.toString(pedido.tipoPedido) == 'MESA'}" class="badge bg-primary px-2 py-1" 
+                              th:text="'Mesa ' + ${pedido.mesa != null ? pedido.mesa.numero : ''}">Mesa 3</span>
+                        <span th:if="${#strings.toString(pedido.tipoPedido) == 'DOMICILIO'}" class="badge bg-info text-dark px-2 py-1">Domicilio</span>
                     </div>
                 </div>
 
@@ -78,11 +78,11 @@
 
                     <!-- Action buttons -->
                     <div class="mt-auto">
-                        <form th:if="${pedido.estado.name() == 'RECIBIDO'}" th:action="@{/cocina/pedido/{id}/preparar(id=${pedido.idPedido})}" method="post">
+                        <form th:if="${#strings.toString(pedido.estado) == 'RECIBIDO'}" th:action="@{/cocina/pedido/{id}/preparar(id=${pedido.idPedido})}" method="post">
                             <button type="submit" class="btn btn-warning w-100 py-2 fw-semibold">Comenzar Preparación</button>
                         </form>
                         
-                        <form th:if="${pedido.estado.name() == 'EN_PREPARACION'}" th:action="@{/cocina/pedido/{id}/listo(id=${pedido.idPedido})}" method="post">
+                        <form th:if="${#strings.toString(pedido.estado) == 'EN_PREPARACION'}" th:action="@{/cocina/pedido/{id}/listo(id=${pedido.idPedido})}" method="post">
                             <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">Marcar como Listo</button>
                         </form>
                     </div>

@@ -23,11 +23,22 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findAllByOrderByFechaPedidoDesc();
     List<Pedido> findByFechaPedidoBetween(LocalDateTime start, LocalDateTime end);
 
-    @Query("SELECT SUM(p.total) FROM Pedido p WHERE p.estado = 'PAGADO' AND p.fechaPedido BETWEEN :start AND :end")
+    // Fetch join para cargar pedido con todos sus detalles (evita LazyInitializationException)
+    @Query("SELECT DISTINCT p FROM Pedido p " +
+           "LEFT JOIN FETCH p.cliente " +
+           "LEFT JOIN FETCH p.detalles d " +
+           "LEFT JOIN FETCH d.plato pl " +
+           "LEFT JOIN FETCH pl.categoria " +
+           "LEFT JOIN FETCH p.domicilio " +
+           "LEFT JOIN FETCH p.pago " +
+           "WHERE p.idPedido = :id")
+    Optional<Pedido> findByIdWithDetalles(Long id);
+
+    @Query("SELECT SUM(p.total) FROM Pedido p WHERE p.estado = com.appetit.gastrosystem.model.EstadoPedido.PAGADO AND p.fechaPedido BETWEEN :start AND :end")
     Double sumTotalVentas(LocalDateTime start, LocalDateTime end);
 
     @Query("SELECT dp.plato.nombre, SUM(dp.cantidad) FROM DetallePedido dp JOIN dp.pedido p " +
-           "WHERE p.estado = 'PAGADO' AND p.fechaPedido BETWEEN :start AND :end " +
+           "WHERE p.estado <> com.appetit.gastrosystem.model.EstadoPedido.CANCELADO AND p.fechaPedido BETWEEN :start AND :end " +
            "GROUP BY dp.plato.nombre ORDER BY SUM(dp.cantidad) DESC")
     List<Object[]> findPlatosMasVendidos(LocalDateTime start, LocalDateTime end);
 }

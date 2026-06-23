@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/cocina")
+@Transactional(readOnly = true)
 public class CocinaController {
 
     private final PedidoService pedidoService;
@@ -29,12 +31,14 @@ public class CocinaController {
         return "cocina/dashboard";
     }
 
+    @Transactional
     @PostMapping("/pedido/{id}/preparar")
     public String iniciarPreparacion(@PathVariable("id") Long id) {
         pedidoService.cambiarEstado(id, EstadoPedido.EN_PREPARACION);
         return "redirect:/cocina";
     }
 
+    @Transactional
     @PostMapping("/pedido/{id}/listo")
     public String marcarListo(@PathVariable("id") Long id) {
         pedidoService.cambiarEstado(id, EstadoPedido.LISTO);

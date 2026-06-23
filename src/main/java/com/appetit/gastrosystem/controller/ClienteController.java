@@ -8,6 +8,7 @@ import com.appetit.gastrosystem.services.ReservaService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/cliente")
+@Transactional(readOnly = true)
 public class ClienteController {
 
     private final ReservaService reservaService;
@@ -45,9 +47,10 @@ public class ClienteController {
         return "cliente/nueva_reserva";
     }
 
+    @Transactional
     @PostMapping("/reserva/guardar")
     public String guardarReserva(@AuthenticationPrincipal UsuarioDetails usuarioDetails,
-                                 @RequestParam("fechaHoraStr") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaHora,
+                                 @RequestParam("fechaHoraStr") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime fechaHora,
                                  @RequestParam("numeroPersonas") Integer numeroPersonas) {
         Usuario cliente = usuarioDetails.getUsuario();
         Reserva reserva = new Reserva();
@@ -68,6 +71,7 @@ public class ClienteController {
         return "cliente/nuevo_pedido";
     }
 
+    @Transactional
     @PostMapping("/pedido/guardar")
     public String guardarPedido(@AuthenticationPrincipal UsuarioDetails usuarioDetails,
                                 @RequestParam("direccionEntrega") String direccionEntrega,
@@ -108,7 +112,7 @@ public class ClienteController {
 
     @GetMapping("/pedido/ver/{id}")
     public String verPedido(@PathVariable("id") Long id, Model model) {
-        Pedido pedido = pedidoService.buscarPorId(id)
+        Pedido pedido = pedidoService.buscarPorIdConDetalles(id)
                 .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
         model.addAttribute("pedido", pedido);
         return "cliente/ver_pedido";

@@ -10,11 +10,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/mesero")
+@Transactional(readOnly = true)
 public class MeseroController {
 
     private final MesaService mesaService;
@@ -43,6 +45,7 @@ public class MeseroController {
         return "mesero/dashboard";
     }
 
+    @Transactional
     @PostMapping("/pedido/abrir")
     public String abrirPedido(@AuthenticationPrincipal UsuarioDetails usuarioDetails,
                               @RequestParam("idMesa") Integer idMesa) {
@@ -53,7 +56,7 @@ public class MeseroController {
 
     @GetMapping("/pedido/ver/{id}")
     public String verPedido(@PathVariable("id") Long id, Model model) {
-        Pedido pedido = pedidoService.buscarPorId(id)
+        Pedido pedido = pedidoService.buscarPorIdConDetalles(id)
                 .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
         model.addAttribute("pedido", pedido);
         model.addAttribute("metodosPago", MetodoPago.values());
@@ -62,13 +65,14 @@ public class MeseroController {
 
     @GetMapping("/pedido/ver/{id}/agregar")
     public String agregarItemForm(@PathVariable("id") Long id, Model model) {
-        Pedido pedido = pedidoService.buscarPorId(id)
+        Pedido pedido = pedidoService.buscarPorIdConDetalles(id)
                 .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
         model.addAttribute("pedido", pedido);
         model.addAttribute("platos", menuService.listarPlatosActivos());
         return "mesero/agregar_item";
     }
 
+    @Transactional
     @PostMapping("/pedido/ver/{id}/agregar/guardar")
     public String guardarItem(@PathVariable("id") Long id,
                               @RequestParam("idPlato") Long idPlato,
@@ -77,6 +81,7 @@ public class MeseroController {
         return "redirect:/mesero/pedido/ver/" + id;
     }
 
+    @Transactional
     @PostMapping("/pedido/ver/{id}/remover/{idDetalle}")
     public String removerItem(@PathVariable("id") Long id,
                               @PathVariable("idDetalle") Long idDetalle) {
@@ -84,6 +89,7 @@ public class MeseroController {
         return "redirect:/mesero/pedido/ver/" + id;
     }
 
+    @Transactional
     @PostMapping("/pedido/ver/{id}/cambiar-estado")
     public String cambiarEstadoPedido(@PathVariable("id") Long id,
                                       @RequestParam("estado") EstadoPedido estado) {
@@ -91,6 +97,7 @@ public class MeseroController {
         return "redirect:/mesero/pedido/ver/" + id;
     }
 
+    @Transactional
     @PostMapping("/pedido/ver/{id}/pagar")
     public String pagarPedido(@PathVariable("id") Long id,
                               @RequestParam("metodoPago") MetodoPago metodoPago) {
