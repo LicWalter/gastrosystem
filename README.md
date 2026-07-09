@@ -59,8 +59,6 @@ Script:
 -- GastroSystem - com.appetit
 -- Base de datos: dbappetit
 -- Módulo: Usuarios y Roles
--- 
--- Puerto: 3307
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS dbappetit
@@ -140,15 +138,19 @@ FROM usuarios u, roles r
 WHERE u.username = 'admin' AND r.nombre = 'ADMINISTRADOR';
 
 
+dbappetit
 
 
-USE dbappetit;
+
 
 -- ¿Existen las 3 tablas?
 SHOW TABLES;
 
 -- ¿Quedaron los 5 roles?
 SELECT * FROM roles;
+
+USE dbappetit;
+SELECT * FROM usuarios;
 
 -- ¿Existe el usuario admin?
 SELECT id_usuario, nombre, username, email, activo FROM usuarios;
