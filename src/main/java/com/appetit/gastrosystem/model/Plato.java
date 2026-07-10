@@ -28,6 +28,9 @@ public class Plato {
     @Column(name = "activo")
     private Boolean activo;
 
+    @Column(name = "imagen", length = 255)
+    private String imagen;
+
     public Plato() {
     }
 
@@ -84,6 +87,57 @@ public class Plato {
 
     public void setActivo(Boolean activo) {
         this.activo = activo;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getImagenUrl() {
+        if (this.imagen != null && !this.imagen.trim().isEmpty()) {
+            return "/img/" + this.imagen;
+        }
+        
+        String nombreNormalizado = this.nombre != null ? this.nombre.toLowerCase().replaceAll("[^a-z0-9]", "") : "";
+        if (nombreNormalizado.contains("hamburguesa")) {
+            return "/img/hamburguesa.png";
+        } else if (nombreNormalizado.contains("alita")) {
+            return "/img/alitas.jpeg";
+        } else if (nombreNormalizado.contains("brownie")) {
+            return "/img/brownieconhelado.jpg";
+        } else if (nombreNormalizado.contains("vino")) {
+            return "/img/copavino.jpg";
+        } else if (nombreNormalizado.contains("dedo")) {
+            return "/img/dedosdequeso.jpg";
+        } else if (nombreNormalizado.contains("flan")) {
+            return "/img/flan.jpg";
+        } else if (nombreNormalizado.contains("gaseosa")) {
+            return "/img/gaseosaPersonal.jpg";
+        } else if (nombreNormalizado.contains("limonada")) {
+            return "/img/limonada.jpg";
+        } else if (nombreNormalizado.contains("nacho")) {
+            return "/img/nachos.webp";
+        } else if (nombreNormalizado.contains("pollo")) {
+            return "/img/polloensalsa.jpg";
+        } else if (nombreNormalizado.contains("agua")) {
+            return "/img/Aguamineral.jpg";
+        }
+        
+        if (this.categoria != null) {
+            String catLower = this.categoria.getNombre().toLowerCase();
+            if (catLower.contains("bebida")) {
+                return "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500&auto=format&fit=crop";
+            } else if (catLower.contains("postre")) {
+                return "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500&auto=format&fit=crop";
+            } else if (catLower.contains("entrada")) {
+                return "https://images.unsplash.com/photo-1541532713592-79a0317b6b77?w=500&auto=format&fit=crop";
+            }
+        }
+        return "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop";
     }
 
     @Override

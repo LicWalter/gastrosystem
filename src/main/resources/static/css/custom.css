@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #f75c03;
-    --primary-hover: #d44c02;
-    --primary-light: #fef0e6;
-    --secondary-color: #2b2d42;
-    --bg-color: #f8f9fa;
+    --primary-color: #c7921e; /* Oro / Dorado */
+    --primary-hover: #a67815;
+    --primary-light: #fdf8eb;
+    --secondary-color: #0b251e; /* Verde Bosque */
+    --bg-color: #faf8f5; /* Crema / Off-white */
     --card-bg: #ffffff;
-    --text-main: #2b2d42;
-    --text-muted: #6c757d;
-    --accent-color: #ffb703;
+    --text-main: #112c24;
+    --text-muted: #627570;
+    --accent-color: #c7921e;
     --success-color: #2ec4b6;
     --danger-color: #e63946;
     --font-family: 'Outfit', sans-serif;
@@ -70,13 +70,13 @@ body {
 }
 
 .btn-gastro-secondary:hover {
-    background-color: #1a1b2a;
+    background-color: #123c31;
     color: #fff;
 }
 
 .form-control:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.25rem rgba(247, 92, 3, 0.15);
+    box-shadow: 0 0 0 0.25rem rgba(199, 146, 30, 0.15);
 }
 
 .gastro-title {

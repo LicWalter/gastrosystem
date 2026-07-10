@@ -13,7 +13,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="text-center mb-4">
-                <h1 class="gastro-title text-primary mb-1">Restaurante Appetit</h1>
+                <img th:src="@{/img/logocuadrado.png}" alt="Restaurante Appetitt" class="img-fluid mb-2" style="height: 240px; max-height: 240px; object-fit: contain;">
                 <p class="text-muted">Crea tu cuenta para realizar pedidos y reservas</p>
             </div>
 
@@ -81,6 +81,7 @@
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-gastro-primary py-2">Registrarme</button>
+                        <a th:href="@{/}" class="btn py-2" style="border: 1px solid var(--primary-color); color: var(--primary-color); background-color: transparent; font-weight: 600; transition: var(--transition);">← Volver al Inicio</a>
                     </div>
                 </form>
 

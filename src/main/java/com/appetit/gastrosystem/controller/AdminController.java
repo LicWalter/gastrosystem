@@ -71,6 +71,26 @@ public class AdminController {
         return "redirect:/admin/menu?platoSuccess";
     }
 
+    @PostMapping("/menu/plato/editar")
+    public String editarPlato(@RequestParam("idPlato") Long idPlato,
+                              @RequestParam("nombre") String nombre,
+                              @RequestParam("precio") BigDecimal precio,
+                              @RequestParam("idCategoria") Integer idCategoria,
+                              @RequestParam(value = "descripcion", required = false) String descripcion,
+                              @RequestParam(value = "imagen", required = false) String imagen) {
+        Plato plato = menuService.buscarPlatoPorId(idPlato)
+                .orElseThrow(() -> new IllegalArgumentException("Plato no encontrado"));
+        plato.setNombre(nombre);
+        plato.setPrecio(precio);
+        plato.setDescripcion(descripcion);
+        plato.setImagen(imagen);
+        Categoria categoria = menuService.buscarCategoriaPorId(idCategoria)
+                .orElseThrow(() -> new IllegalArgumentException("Categoría inválida"));
+        plato.setCategoria(categoria);
+        menuService.guardarPlato(plato);
+        return "redirect:/admin/menu?platoEditSuccess";
+    }
+
     @PostMapping("/menu/plato/{id}/toggle")
     public String togglePlato(@PathVariable("id") Long id, @RequestParam("activo") Boolean activo) {
         menuService.actualizarEstadoPlato(id, activo);

@@ -8,7 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/custom.css}">
     <style>
         .hero-section {
-            background: linear-gradient(rgba(43, 45, 66, 0.8), rgba(43, 45, 66, 0.9)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&auto=format&fit=crop&q=80') no-repeat center center/cover;
+            background: linear-gradient(rgba(11, 37, 30, 0.85), rgba(11, 37, 30, 0.95)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&auto=format&fit=crop&q=80') no-repeat center center/cover;
             color: #fff;
             padding: 10rem 0 8rem 0;
             border-bottom-left-radius: 40px;
@@ -23,7 +23,7 @@
             right: -10%;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(247, 92, 3, 0.2) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(199, 146, 30, 0.15) 0%, rgba(0,0,0,0) 70%);
             border-radius: 50%;
             z-index: 1;
         }
@@ -92,11 +92,63 @@
             margin-bottom: 1rem;
         }
         .cta-section {
-            background: linear-gradient(135deg, var(--secondary-color) 0%, #1c1d2e 100%);
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #0d2f26 100%);
             color: #fff;
             border-radius: var(--border-radius-lg);
             padding: 4rem 2rem;
             margin-top: 5rem;
+        }
+        .btn-gold-solid {
+            background-color: var(--primary-color) !important;
+            color: #0b251e !important;
+            border: none !important;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .btn-gold-solid:hover {
+            background-color: var(--primary-hover) !important;
+            color: #0b251e !important;
+            transform: scale(1.02);
+        }
+        .btn-gold-solid-white {
+            background-color: var(--primary-color) !important;
+            color: #fff !important;
+            border: none !important;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .btn-gold-solid-white:hover {
+            background-color: var(--primary-hover) !important;
+            color: #fff !important;
+            transform: scale(1.02);
+        }
+        .btn-gold-outline {
+            background-color: transparent !important;
+            color: #fff !important;
+            border: 1px solid var(--primary-color) !important;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .btn-gold-outline:hover {
+            background-color: var(--primary-color) !important;
+            color: #0b251e !important;
+            transform: scale(1.02);
+        }
+        .experience-card {
+            background: #0d2f26 !important;
+            border: 1px solid rgba(199, 146, 30, 0.2) !important;
+        }
+        .icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(199, 146, 30, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            flex-shrink: 0;
         }
     </style>
 </head>
@@ -106,7 +158,7 @@
 <nav class="navbar navbar-expand-lg gastro-nav navbar-dark fixed-top py-3">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
-            <span class="fs-4 fw-bold">🍽 Restaurante Appetit</span>
+            <img th:src="@{/img/logohorizontal.png}" alt="Restaurante Appetitt" style="height: 90px; max-width: 100%; object-fit: contain;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
             <span class="navbar-toggler-icon"></span>
@@ -123,10 +175,10 @@
                     <a class="nav-link text-white" href="#contacto">Contacto</a>
                 </li>
                 <li class="nav-item ms-2">
-                    <a class="btn btn-outline-light px-4 py-2" th:href="@{/login}">Iniciar Sesión</a>
+                    <a class="btn btn-gold-outline px-4 py-2" th:href="@{/login}">Iniciar Sesión</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-gastro-primary px-4 py-2" th:href="@{/registro}">Registrarse</a>
+                    <a class="btn btn-gold-solid px-4 py-2" th:href="@{/registro}">Registrarse</a>
                 </li>
             </ul>
         </div>
@@ -138,36 +190,36 @@
     <div class="container position-relative" style="z-index: 2;">
         <div class="row align-items-center g-5">
             <div class="col-lg-7 animate-fade-in">
-                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3">EXPERIENCIA GASTRONÓMICA PREMIUM</span>
-                <h1 class="display-3 fw-bold mb-3 text-white">Sabor único, momentos inolvidables</h1>
+                <span class="badge text-dark px-3 py-2 rounded-pill fw-bold mb-3" style="background-color: var(--primary-color);">EXPERIENCIA GASTRONÓMICA PREMIUM</span>
+                <h1 class="display-3 fw-bold mb-3 text-white">Sabor único,<br>momentos <span style="color: var(--primary-color);">inolvidables</span></h1>
                 <p class="lead text-light text-opacity-80 mb-4">
-                    Bienvenidos a Appetit. Elaboramos cada plato con ingredientes frescos, pasión por la cocina y un toque de innovación para deleitar tus sentidos.
+                    Bienvenidos a Appetitt. Elaboramos cada plato con ingredientes frescos, pasión por la cocina y un toque de innovación para deleitar tus sentidos.
                 </p>
                 <div class="d-flex flex-column flex-sm-row gap-3">
-                    <a href="#menu" class="btn btn-gastro-primary btn-lg px-5 py-3 shadow-lg">Ver Nuestro Menú</a>
-                    <a th:href="@{/registro}" class="btn btn-outline-light btn-lg px-4 py-3">Crear Cuenta Cliente</a>
+                    <a href="#menu" class="btn btn-gold-solid-white btn-lg px-5 py-3 shadow-lg">Ver Nuestro Menú</a>
+                    <a th:href="@{/registro}" class="btn btn-gold-outline btn-lg px-4 py-3">Crear Cuenta Cliente</a>
                 </div>
             </div>
             <div class="col-lg-5 text-center animate-fade-in">
-                <div class="card bg-white bg-opacity-10 border-0 p-4 rounded-4 shadow-lg text-start backdrop-blur text-white">
-                    <h5 class="fw-bold mb-3 text-warning">✨ Vive la Experiencia</h5>
+                <div class="card experience-card border-0 p-4 rounded-4 shadow-lg text-start text-white">
+                    <h5 class="fw-bold mb-3" style="color: var(--primary-color);">✨ Vive la Experiencia</h5>
                     <p class="text-light text-opacity-90 mb-3">Disfruta de nuestros servicios creados especialmente para ti:</p>
-                    <div class="d-flex gap-3 align-items-center mb-3">
-                        <div class="bg-primary bg-opacity-25 rounded p-2 text-warning fs-5">🍷</div>
+                    <div class="d-flex gap-3 align-items-start mb-3">
+                        <div class="icon-circle">🛎</div>
                         <div>
                             <h6 class="mb-0 fw-bold">Reservas en Mesa</h6>
                             <small class="text-light text-opacity-75">Asegura tu lugar favorito de forma rápida y sencilla.</small>
                         </div>
                     </div>
-                    <div class="d-flex gap-3 align-items-center mb-3">
-                        <div class="bg-success bg-opacity-25 rounded p-2 text-warning fs-5">🛵</div>
+                    <div class="d-flex gap-3 align-items-start mb-3">
+                        <div class="icon-circle">🛵</div>
                         <div>
                             <h6 class="mb-0 fw-bold">Pedidos a Domicilio</h6>
-                            <small class="text-light text-opacity-75">Llevamos el sabor único de Appetit directo a tu puerta.</small>
+                            <small class="text-light text-opacity-75">Llevamos el sabor único de Appetitt directo a tu puerta.</small>
                         </div>
                     </div>
-                    <div class="d-flex gap-3 align-items-center">
-                        <div class="bg-info bg-opacity-25 rounded p-2 text-warning fs-5">🥗</div>
+                    <div class="d-flex gap-3 align-items-start">
+                        <div class="icon-circle">🥣</div>
                         <div>
                             <h6 class="mb-0 fw-bold">Menú Siempre Fresco</h6>
                             <small class="text-light text-opacity-75">Variedad de platos tradicionales con toques de autor.</small>
@@ -185,33 +237,19 @@
         <div class="col-lg-6">
             <div class="position-relative">
                 <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80" alt="Restaurante" class="img-fluid rounded-4 shadow-lg">
-                <div class="position-absolute bottom-0 end-0 bg-warning text-dark p-3 m-3 rounded-3 shadow fw-bold">
+                <div class="position-absolute bottom-0 end-0 text-dark p-3 m-3 rounded-3 shadow fw-bold" style="background-color: var(--primary-color);">
                     Est. 2020
                 </div>
             </div>
         </div>
         <div class="col-lg-6">
-            <span class="text-primary fw-bold text-uppercase tracking-wider">Nuestra Historia</span>
-            <h2 class="display-5 fw-bold gastro-title mb-3">Bienvenidos a Appetit</h2>
+            <span class="fw-bold text-uppercase tracking-wider" style="color: var(--primary-color);">Nuestra Historia</span>
+            <h2 class="display-5 fw-bold gastro-title mb-3">Bienvenido a Appetitt</h2>
             <p class="text-muted mb-4 lead">
-                Fundado con el deseo de reinventar la gastronomía local, Appetit fusiona recetas tradicionales con técnicas modernas para crear platos memorables.
+                Nacimos del amor por la cocina del Pacífico colombiana y del Valle del Cauca. Cada receta cuenta una historia, cada ingrediente refleja nuestra tierra y cada experiencia, nuestro compromiso con la excelencia.
             </p>
-            <p class="text-muted mb-4">
-                Creemos que comer no es solo alimentarse, sino compartir historias y disfrutar de buena compañía. Por eso, diseñamos un espacio acogedor y un menú diverso que se adapta a todos los paladares.
-            </p>
-            <div class="row g-3">
-                <div class="col-sm-6">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="fs-4 text-warning">✔</span>
-                        <span class="fw-semibold text-secondary">Ingredientes 100% Frescos</span>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="fs-4 text-warning">✔</span>
-                        <span class="fw-semibold text-secondary">Chefs Profesionales</span>
-                    </div>
-                </div>
+            <div class="mt-4">
+                <a href="#menu" class="btn px-4 py-3" style="background-color: var(--secondary-color) !important; color: #fff !important; border: none; font-weight: 600; border-radius: var(--border-radius-sm);">Conoce Nuestra Historia</a>
             </div>
         </div>
     </div>
@@ -241,13 +279,7 @@
             <div class="col-md-6 col-lg-4 animate-fade-in" th:each="plato : ${cat.platos.?[activo]}">
                 <div class="card dish-card">
                     <div class="dish-img-container">
-                        <!-- Image generator logic based on category name -->
-                        <img th:with="catLower=${#strings.toLowerCase(cat.nombre)}"
-                             th:src="${#strings.contains(catLower, 'bebida') ? 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500&auto=format&fit=crop' :
-                                      (#strings.contains(catLower, 'postre') ? 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500&auto=format&fit=crop' :
-                                      (#strings.contains(catLower, 'entrada') ? 'https://images.unsplash.com/photo-1541532713592-79a0317b6b77?w=500&auto=format&fit=crop' :
-                                      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop'))}"
-                             class="dish-img" alt="Plato" />
+                        <img th:src="${plato.imagenUrl}" class="dish-img" alt="Plato" />
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between p-4" style="flex-grow: 1;">
                         <div>
@@ -306,7 +338,7 @@
 <footer class="bg-dark text-white text-center py-4 mt-auto">
     <div class="container">
         <p class="mb-1 fw-bold">Restaurante Appetit &copy; 2026</p>
-        <p class="text-muted small mb-0">Todos los derechos reservados. Impulsado por el sistema de gestión GastroSystem.</p>
+        <p class="text-muted small mb-0">Todos los derechos reservados. Restaurante Appetit &copy; 2026</p>
     </div>
 </footer>
 
