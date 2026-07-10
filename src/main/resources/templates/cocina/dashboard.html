@@ -63,6 +63,13 @@
                 </div>
 
                 <div class="card-body px-3 py-3">
+                    <!-- Solicitante -->
+                    <div class="mb-3 small text-muted">
+                        <strong>Pedido por:</strong>
+                        <span th:if="${pedido.cliente != null}" th:text="${pedido.cliente.nombre + ' ' + pedido.cliente.apellido}">Cliente</span>
+                        <span th:if="${pedido.cliente == null && pedido.mesero != null}" th:text="${pedido.mesero.nombre + ' ' + pedido.mesero.apellido}">Mesero</span>
+                    </div>
+
                     <h6 class="text-muted text-uppercase small font-bold border-bottom pb-2 mb-2">Platos</h6>
                     
                     <!-- Dishes list -->
@@ -77,13 +84,18 @@
                     </ul>
 
                     <!-- Action buttons -->
-                    <div class="mt-auto">
+                    <div class="mt-auto d-flex flex-column gap-2">
                         <form th:if="${#strings.toString(pedido.estado) == 'RECIBIDO'}" th:action="@{/cocina/pedido/{id}/preparar(id=${pedido.idPedido})}" method="post">
                             <button type="submit" class="btn btn-warning w-100 py-2 fw-semibold">Comenzar Preparación</button>
                         </form>
                         
                         <form th:if="${#strings.toString(pedido.estado) == 'EN_PREPARACION'}" th:action="@{/cocina/pedido/{id}/listo(id=${pedido.idPedido})}" method="post">
                             <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">Marcar como Listo</button>
+                        </form>
+
+                        <form th:if="${#strings.toString(pedido.tipoPedido) == 'DOMICILIO'}" th:action="@{/cocina/pedido/{id}/cancelar(id=${pedido.idPedido})}" method="post"
+                              onsubmit="return confirm('¿Está seguro de que desea cancelar este pedido a domicilio?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger w-100 py-1">Cancelar Pedido</button>
                         </form>
                     </div>
                 </div>

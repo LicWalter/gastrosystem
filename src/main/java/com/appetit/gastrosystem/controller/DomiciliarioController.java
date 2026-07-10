@@ -58,4 +58,10 @@ public class DomiciliarioController {
 
         return "redirect:/domiciliario?success";
     }
+
+    @PostMapping("/entrega/{id}/confirmar-cancelacion")
+    public String confirmarCancelacion(@PathVariable("id") Long id) {
+        domicilioService.actualizarEstadoEntrega(id, EstadoEntrega.ENTREGADO);
+        return "redirect:/domiciliario?cancelConfirmed";
+    }
 }

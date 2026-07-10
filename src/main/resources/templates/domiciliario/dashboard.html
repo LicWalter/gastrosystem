@@ -33,6 +33,10 @@
         ¡Domicilio entregado y pago registrado correctamente!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+    <div th:if="${param.cancelConfirmed}" class="alert alert-success alert-dismissible fade show" role="alert">
+        ¡Cancelación confirmada y quitada de la lista!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
     <div class="row mb-5 text-center text-md-start">
         <div class="col-12">
@@ -52,26 +56,45 @@
                     <p class="small text-muted">Reclama un pedido de la lista de disponibles.</p>
                 </div>
 
-                <div th:each="entrega : ${misEntregas}" class="card border-0 bg-light rounded-3 p-3 mb-3 shadow-sm">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h4 class="h6 font-bold mb-0" th:text="'Pedido #' + ${entrega.pedido.idPedido}">Pedido #1</h4>
-                        <span class="badge bg-warning text-dark text-uppercase" th:text="${entrega.estadoEntrega}">EN CAMINO</span>
+                <div th:each="entrega : ${misEntregas}" class="card border-0 rounded-3 p-3 mb-3 shadow-sm"
+                     th:classappend="${#strings.toString(entrega.pedido.estado) == 'CANCELADO' ? 'bg-danger-subtle border-start border-5 border-danger' : 'bg-light'}">
+                    
+                    <!-- VISTA PEDIDO CANCELADO -->
+                    <div th:if="${#strings.toString(entrega.pedido.estado) == 'CANCELADO'}">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h4 class="h6 font-bold mb-0 text-danger" th:text="'Pedido #' + ${entrega.pedido.idPedido} + ' (CANCELADO)'">Pedido #1</h4>
+                            <span class="badge bg-danger">CANCELADO</span>
+                        </div>
+                        <p class="mb-3 small text-danger font-semibold">Este pedido ha sido cancelado por la cocina o el cliente. Por favor, <strong>NO</strong> realice la entrega.</p>
+                        <div class="d-flex justify-content-end">
+                            <form th:action="@{/domiciliario/entrega/{id}/confirmar-cancelacion(id=${entrega.idDomicilio})}" method="post">
+                                <button type="submit" class="btn btn-sm btn-secondary">Entendido / Quitar</button>
+                            </form>
+                        </div>
                     </div>
 
-                    <p class="mb-1 small"><strong>Cliente:</strong> <span th:text="${entrega.pedido.cliente.nombre + ' ' + entrega.pedido.cliente.apellido}">Juan Pérez</span></p>
-                    <p class="mb-1 small"><strong>Teléfono:</strong> <span th:text="${entrega.pedido.cliente.telefono}">3001234567</span></p>
-                    <p class="mb-3 small"><strong>Dirección:</strong> <span class="text-primary font-semibold" th:text="${entrega.direccionEntrega}">Calle 123 # 45-67</span></p>
-                    
-                    <div class="d-flex justify-content-between align-items-center border-top pt-3">
-                        <div class="text-primary fw-bold fs-5" th:text="'$' + ${#numbers.formatDecimal(entrega.pedido.total, 1, 2)}">$0.00</div>
+                    <!-- VISTA PEDIDO ACTIVO NORMAL -->
+                    <div th:if="${#strings.toString(entrega.pedido.estado) != 'CANCELADO'}">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h4 class="h6 font-bold mb-0" th:text="'Pedido #' + ${entrega.pedido.idPedido}">Pedido #1</h4>
+                            <span class="badge bg-warning text-dark text-uppercase" th:text="${entrega.estadoEntrega}">EN CAMINO</span>
+                        </div>
+
+                        <p class="mb-1 small"><strong>Cliente:</strong> <span th:text="${entrega.pedido.cliente.nombre + ' ' + entrega.pedido.cliente.apellido}">Juan Pérez</span></p>
+                        <p class="mb-1 small"><strong>Teléfono:</strong> <span th:text="${entrega.pedido.cliente.telefono}">3001234567</span></p>
+                        <p class="mb-3 small"><strong>Dirección:</strong> <span class="text-primary font-semibold" th:text="${entrega.direccionEntrega}">Calle 123 # 45-67</span></p>
                         
-                        <!-- Delivery execution form -->
-                        <form th:action="@{/domiciliario/entrega/{id}/entregar(id=${entrega.idDomicilio})}" method="post" class="d-flex gap-2">
-                            <select name="metodoPago" class="form-select form-select-sm" style="width: 120px;" required>
-                                <option th:each="metodo : ${metodosPago}" th:value="${metodo}" th:text="${metodo}">EFECTIVO</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-success">Entregar</button>
-                        </form>
+                        <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                            <div class="text-primary fw-bold fs-5" th:text="'$' + ${#numbers.formatDecimal(entrega.pedido.total, 1, 2)}">$0.00</div>
+                            
+                            <!-- Delivery execution form -->
+                            <form th:action="@{/domiciliario/entrega/{id}/entregar(id=${entrega.idDomicilio})}" method="post" class="d-flex gap-2">
+                                <select name="metodoPago" class="form-select form-select-sm" style="width: 120px;" required>
+                                    <option th:each="metodo : ${metodosPago}" th:value="${metodo}" th:text="${metodo}">EFECTIVO</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-success">Entregar</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

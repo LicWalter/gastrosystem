@@ -34,6 +34,15 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
            "WHERE p.idPedido = :id")
     Optional<Pedido> findByIdWithDetalles(Long id);
 
+    @Query("SELECT DISTINCT p FROM Pedido p " +
+           "LEFT JOIN FETCH p.cliente " +
+           "LEFT JOIN FETCH p.mesero " +
+           "LEFT JOIN FETCH p.domicilio " +
+           "LEFT JOIN FETCH p.pago " +
+           "WHERE p.fechaPedido BETWEEN :start AND :end " +
+           "ORDER BY p.fechaPedido DESC")
+    List<Pedido> findPedidosDelDiaConRelaciones(LocalDateTime start, LocalDateTime end);
+
     @Query("SELECT SUM(p.total) FROM Pedido p WHERE p.estado = com.appetit.gastrosystem.model.EstadoPedido.PAGADO AND p.fechaPedido BETWEEN :start AND :end")
     Double sumTotalVentas(LocalDateTime start, LocalDateTime end);
 

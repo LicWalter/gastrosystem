@@ -44,4 +44,11 @@ public class CocinaController {
         pedidoService.cambiarEstado(id, EstadoPedido.LISTO);
         return "redirect:/cocina";
     }
+
+    @Transactional
+    @PostMapping("/pedido/{id}/cancelar")
+    public String cancelarPedido(@PathVariable("id") Long id) {
+        pedidoService.cambiarEstado(id, EstadoPedido.CANCELADO);
+        return "redirect:/cocina";
+    }
 }

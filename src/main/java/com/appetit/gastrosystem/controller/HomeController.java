@@ -1,9 +1,11 @@
 package com.appetit.gastrosystem.controller;
 
+import com.appetit.gastrosystem.services.MenuService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Collection;
@@ -11,10 +13,18 @@ import java.util.Collection;
 @Controller
 public class HomeController {
 
+    private final MenuService menuService;
+
+    public HomeController(MenuService menuService) {
+        this.menuService = menuService;
+    }
+
     @GetMapping("/")
-    public String inicio(@AuthenticationPrincipal UserDetails userDetails) {
+    public String inicio(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (userDetails == null) {
-            return "redirect:/login";
+            model.addAttribute("categorias", menuService.listarCategorias());
+            model.addAttribute("platos", menuService.listarPlatosActivos());
+            return "index";
         }
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         for (GrantedAuthority authority : authorities) {

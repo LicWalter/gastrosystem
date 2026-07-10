@@ -5,6 +5,7 @@ import com.appetit.gastrosystem.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -151,5 +152,22 @@ public class AdminController {
                                      @RequestParam(value = "idMesa", required = false) Integer idMesa) {
         reservaService.asignarMesa(id, idMesa);
         return "redirect:/admin/reservas?successMesa";
+    }
+
+    @GetMapping("/reporte/ventas-pdf")
+    public void descargarReportePdf(HttpServletResponse response) {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=reporte_ventas_diarias.pdf");
+        try {
+            reporteService.generarReporteDiarioPdf(response.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @PostMapping("/resetear-sistema")
+    public String resetearSistema() {
+        pedidoService.resetearPedidosYVentas();
+        return "redirect:/admin?resetSuccess";
     }
 }

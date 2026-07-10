@@ -42,7 +42,7 @@
     </div>
 
     <!-- Table Grid -->
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4" th:if="${!mesas.isEmpty()}">
         <div class="col" th:each="mesa : ${mesas}">
             <!-- Determine active order -->
             <div th:with="pedidoActivo=${pedidoService.obtenerPedidoActivoMesa(mesa.idMesa)}">
@@ -88,6 +88,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div th:if="${mesas.isEmpty()}" class="row justify-content-center my-5 animate-fade-in">
+        <div class="col-md-6 text-center py-5 rounded-4 bg-white shadow-sm border border-dashed">
+            <div class="fs-1 mb-3">🪑</div>
+            <h3 class="h5 mb-2 text-secondary font-bold">No hay mesas físicas registradas</h3>
+            <p class="text-muted mb-0">En este momento no hay mesas creadas en el sistema. Contacta al administrador para agregarlas.</p>
         </div>
     </div>
 </div>

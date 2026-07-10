@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurante Appetit — Sabor Único y Momentos Inolvidables</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <style>
+        .hero-section {
+            background: linear-gradient(rgba(43, 45, 66, 0.8), rgba(43, 45, 66, 0.9)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&auto=format&fit=crop&q=80') no-repeat center center/cover;
+            color: #fff;
+            padding: 10rem 0 8rem 0;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(247, 92, 3, 0.2) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .about-card {
+            border: none;
+            border-radius: var(--border-radius-md);
+            background: #fff;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+        }
+        .menu-category-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+        .menu-category-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+        .dish-card {
+            border: none;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            background: #fff;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .dish-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--box-shadow-hover);
+        }
+        .dish-img-container {
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+        }
+        .dish-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        .dish-card:hover .dish-img {
+            transform: scale(1.08);
+        }
+        .dish-price {
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        .info-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .cta-section {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #1c1d2e 100%);
+            color: #fff;
+            border-radius: var(--border-radius-lg);
+            padding: 4rem 2rem;
+            margin-top: 5rem;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg gastro-nav navbar-dark fixed-top py-3">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+            <span class="fs-4 fw-bold">🍽 Restaurante Appetit</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarMain">
+            <ul class="navbar-nav align-items-center gap-3">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#nosotros">Sobre Nosotros</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#menu">Nuestro Menú</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#contacto">Contacto</a>
+                </li>
+                <li class="nav-item ms-2">
+                    <a class="btn btn-outline-light px-4 py-2" th:href="@{/login}">Iniciar Sesión</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-gastro-primary px-4 py-2" th:href="@{/registro}">Registrarse</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<header class="hero-section text-center text-md-start">
+    <div class="container position-relative" style="z-index: 2;">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7 animate-fade-in">
+                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3">EXPERIENCIA GASTRONÓMICA PREMIUM</span>
+                <h1 class="display-3 fw-bold mb-3 text-white">Sabor único, momentos inolvidables</h1>
+                <p class="lead text-light text-opacity-80 mb-4">
+                    Bienvenidos a Appetit. Elaboramos cada plato con ingredientes frescos, pasión por la cocina y un toque de innovación para deleitar tus sentidos.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3">
+                    <a href="#menu" class="btn btn-gastro-primary btn-lg px-5 py-3 shadow-lg">Ver Nuestro Menú</a>
+                    <a th:href="@{/registro}" class="btn btn-outline-light btn-lg px-4 py-3">Crear Cuenta Cliente</a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center animate-fade-in">
+                <div class="card bg-white bg-opacity-10 border-0 p-4 rounded-4 shadow-lg text-start backdrop-blur text-white">
+                    <h5 class="fw-bold mb-3 text-warning">✨ Vive la Experiencia</h5>
+                    <p class="text-light text-opacity-90 mb-3">Disfruta de nuestros servicios creados especialmente para ti:</p>
+                    <div class="d-flex gap-3 align-items-center mb-3">
+                        <div class="bg-primary bg-opacity-25 rounded p-2 text-warning fs-5">🍷</div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Reservas en Mesa</h6>
+                            <small class="text-light text-opacity-75">Asegura tu lugar favorito de forma rápida y sencilla.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center mb-3">
+                        <div class="bg-success bg-opacity-25 rounded p-2 text-warning fs-5">🛵</div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Pedidos a Domicilio</h6>
+                            <small class="text-light text-opacity-75">Llevamos el sabor único de Appetit directo a tu puerta.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center">
+                        <div class="bg-info bg-opacity-25 rounded p-2 text-warning fs-5">🥗</div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Menú Siempre Fresco</h6>
+                            <small class="text-light text-opacity-75">Variedad de platos tradicionales con toques de autor.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Sobre Nosotros / Info section -->
+<section id="nosotros" class="container py-5 my-5">
+    <div class="row g-5 align-items-center">
+        <div class="col-lg-6">
+            <div class="position-relative">
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80" alt="Restaurante" class="img-fluid rounded-4 shadow-lg">
+                <div class="position-absolute bottom-0 end-0 bg-warning text-dark p-3 m-3 rounded-3 shadow fw-bold">
+                    Est. 2020
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <span class="text-primary fw-bold text-uppercase tracking-wider">Nuestra Historia</span>
+            <h2 class="display-5 fw-bold gastro-title mb-3">Bienvenidos a Appetit</h2>
+            <p class="text-muted mb-4 lead">
+                Fundado con el deseo de reinventar la gastronomía local, Appetit fusiona recetas tradicionales con técnicas modernas para crear platos memorables.
+            </p>
+            <p class="text-muted mb-4">
+                Creemos que comer no es solo alimentarse, sino compartir historias y disfrutar de buena compañía. Por eso, diseñamos un espacio acogedor y un menú diverso que se adapta a todos los paladares.
+            </p>
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fs-4 text-warning">✔</span>
+                        <span class="fw-semibold text-secondary">Ingredientes 100% Frescos</span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fs-4 text-warning">✔</span>
+                        <span class="fw-semibold text-secondary">Chefs Profesionales</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Menu section -->
+<section id="menu" class="container py-5">
+    <div class="text-center mb-5">
+        <span class="text-primary fw-bold text-uppercase tracking-wider">Nuestra Carta</span>
+        <h2 class="display-4 fw-bold gastro-title">Descubre el Menú</h2>
+        <p class="text-muted">Selección de platos gourmet elaborados en el momento.</p>
+    </div>
+
+    <!-- Empty state if no categories/dishes -->
+    <div th:if="${#lists.isEmpty(categorias)}" class="text-center py-5">
+        <div class="fs-1 mb-3">🍽</div>
+        <h4 class="text-secondary fw-bold">Nuestro menú se está renovando</h4>
+        <p class="text-muted">¡Pronto compartiremos nuestro delicioso menú contigo!</p>
+    </div>
+
+    <!-- Dynamic Menu Loop -->
+    <div th:each="cat : ${categorias}" class="mb-5" th:if="${!cat.platos.?[activo].isEmpty()}">
+        <h3 class="menu-category-title h2" th:text="${cat.nombre}">Entradas</h3>
+        <p class="text-muted mb-4 mt-n2" th:text="${cat.descripcion}">Descripción de la categoría</p>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4 animate-fade-in" th:each="plato : ${cat.platos.?[activo]}">
+                <div class="card dish-card">
+                    <div class="dish-img-container">
+                        <!-- Image generator logic based on category name -->
+                        <img th:with="catLower=${#strings.toLowerCase(cat.nombre)}"
+                             th:src="${#strings.contains(catLower, 'bebida') ? 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500&auto=format&fit=crop' :
+                                      (#strings.contains(catLower, 'postre') ? 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500&auto=format&fit=crop' :
+                                      (#strings.contains(catLower, 'entrada') ? 'https://images.unsplash.com/photo-1541532713592-79a0317b6b77?w=500&auto=format&fit=crop' :
+                                      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop'))}"
+                             class="dish-img" alt="Plato" />
+                    </div>
+                    <div class="card-body d-flex flex-column justify-content-between p-4" style="flex-grow: 1;">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title fw-bold text-secondary mb-0" th:text="${plato.nombre}">Nombre del Plato</h5>
+                            </div>
+                            <p class="card-text text-muted small" th:text="${plato.descripcion}">Descripción detallada del plato.</p>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                            <span class="dish-price" th:text="${'$' + #numbers.formatDecimal(plato.precio, 1, 'POINT', 0, 'COMMA')}">$0.00</span>
+                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1">Fresco</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact & Info Section -->
+<section id="contacto" class="container py-5 bg-white rounded-4 shadow-sm my-5">
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="info-icon">📍</div>
+            <h5 class="fw-bold text-secondary">Dirección</h5>
+            <p class="text-muted mb-0">Calle Gourmet #123<br>Sector Gastronómico, Ciudad</p>
+        </div>
+        <div class="col-md-4">
+            <div class="info-icon">🕒</div>
+            <h5 class="fw-bold text-secondary">Horarios</h5>
+            <p class="text-muted mb-0">Lunes a Sábado: 11:00 AM - 10:00 PM<br>Domingos: 12:00 PM - 9:00 PM</p>
+        </div>
+        <div class="col-md-4">
+            <div class="info-icon">📞</div>
+            <h5 class="fw-bold text-secondary">Reservas & Contacto</h5>
+            <p class="text-muted mb-0">info@restauranteappetit.com<br>+1 (555) 019-2834</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA section -->
+<div class="container mb-5">
+    <div class="cta-section text-center">
+        <h2 class="display-5 fw-bold mb-3">¿Deseas reservar o pedir a domicilio?</h2>
+        <p class="lead text-light text-opacity-80 mb-4 mx-auto" style="max-width: 600px;">
+            Regístrate o inicia sesión en nuestra plataforma para ordenar de manera rápida a tu domicilio o asegurar una mesa en nuestro local físico.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-column flex-sm-row">
+            <a th:href="@{/login}" class="btn btn-gastro-primary btn-lg px-4 py-3">Iniciar Sesión</a>
+            <a th:href="@{/registro}" class="btn btn-outline-light btn-lg px-4 py-3">Registrarse Ahora</a>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-4 mt-auto">
+    <div class="container">
+        <p class="mb-1 fw-bold">Restaurante Appetit &copy; 2026</p>
+        <p class="text-muted small mb-0">Todos los derechos reservados. Impulsado por el sistema de gestión GastroSystem.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

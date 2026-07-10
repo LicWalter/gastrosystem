@@ -2,15 +2,14 @@ package com.appetit.gastrosystem.controller;
 
 import com.appetit.gastrosystem.model.*;
 import com.appetit.gastrosystem.security.UsuarioDetails;
-import com.appetit.gastrosystem.services.MenuService;
-import com.appetit.gastrosystem.services.PedidoService;
-import com.appetit.gastrosystem.services.ReservaService;
+import com.appetit.gastrosystem.services.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,13 +22,16 @@ public class ClienteController {
     private final ReservaService reservaService;
     private final PedidoService pedidoService;
     private final MenuService menuService;
+    private final ReporteService reporteService;
 
     public ClienteController(ReservaService reservaService,
                              PedidoService pedidoService,
-                             MenuService menuService) {
+                             MenuService menuService,
+                             ReporteService reporteService) {
         this.reservaService = reservaService;
         this.pedidoService = pedidoService;
         this.menuService = menuService;
+        this.reporteService = reporteService;
     }
 
     @GetMapping
@@ -116,5 +118,38 @@ public class ClienteController {
                 .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
         model.addAttribute("pedido", pedido);
         return "cliente/ver_pedido";
+    }
+
+    @GetMapping("/pedido/factura-pdf/{id}")
+    public void descargarFacturaPdf(@PathVariable("id") Long id, HttpServletResponse response) {
+        Pedido pedido = pedidoService.buscarPorIdConDetalles(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=factura_pedido_" + id + ".pdf");
+        try {
+            reporteService.generarFacturaPdf(pedido, response.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Transactional
+    @PostMapping("/pedido/{id}/cancelar")
+    public String cancelarPedido(@PathVariable("id") Long id, @AuthenticationPrincipal UsuarioDetails usuarioDetails) {
+        Pedido pedido = pedidoService.buscarPorId(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+        
+        // Validar que el cliente sea el propietario
+        if (!pedido.getCliente().getIdUsuario().equals(usuarioDetails.getUsuario().getIdUsuario())) {
+            throw new IllegalArgumentException("No tiene permisos para cancelar este pedido");
+        }
+        
+        // Solo permitir cancelar si está en estado RECIBIDO
+        if (pedido.getEstado() == EstadoPedido.RECIBIDO) {
+            pedidoService.cambiarEstado(id, EstadoPedido.CANCELADO);
+            return "redirect:/cliente?cancelSuccess";
+        } else {
+            return "redirect:/cliente?cancelError";
+        }
     }
 }

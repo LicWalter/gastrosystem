@@ -213,12 +213,25 @@ public class PedidoService {
                 domicilio.setFechaEntrega(LocalDateTime.now());
                 domicilioRepository.save(domicilio);
             } else if (nuevoEstado == EstadoPedido.CANCELADO) {
-                // Si se cancela el pedido, el domicilio también se ve afectado
-                domicilio.setEstadoEntrega(EstadoEntrega.ENTREGADO); // Finalizar de algún modo
+                // Si se cancela el pedido y no tiene repartidor asignado, lo finalizamos para que desaparezca
+                if (domicilio.getRepartidor() == null) {
+                    domicilio.setEstadoEntrega(EstadoEntrega.ENTREGADO);
+                }
+                // Si ya tiene repartidor, lo dejamos en su estado actual para que el repartidor vea que se canceló
                 domicilioRepository.save(domicilio);
             }
         }
 
         return pedidoRepository.save(pedido);
+    }
+
+    @Transactional
+    public void resetearPedidosYVentas() {
+        pedidoRepository.deleteAll();
+        List<Mesa> mesas = mesaRepository.findAll();
+        for (Mesa mesa : mesas) {
+            mesa.setEstado(EstadoMesa.DISPONIBLE);
+            mesaRepository.save(mesa);
+        }
     }
 }
