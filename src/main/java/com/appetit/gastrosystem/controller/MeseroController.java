@@ -2,10 +2,13 @@ package com.appetit.gastrosystem.controller;
 
 import com.appetit.gastrosystem.model.*;
 import com.appetit.gastrosystem.security.UsuarioDetails;
+import com.appetit.gastrosystem.services.FacturaJasperService;
 import com.appetit.gastrosystem.services.MenuService;
 import com.appetit.gastrosystem.services.MesaService;
 import com.appetit.gastrosystem.services.PagoService;
 import com.appetit.gastrosystem.services.PedidoService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,15 +26,18 @@ public class MeseroController {
     private final PedidoService pedidoService;
     private final MenuService menuService;
     private final PagoService pagoService;
+    private final FacturaJasperService facturaJasperService;
 
     public MeseroController(MesaService mesaService,
                             PedidoService pedidoService,
                             MenuService menuService,
-                            PagoService pagoService) {
+                            PagoService pagoService,
+                            FacturaJasperService facturaJasperService) {
         this.mesaService = mesaService;
         this.pedidoService = pedidoService;
         this.menuService = menuService;
         this.pagoService = pagoService;
+        this.facturaJasperService = facturaJasperService;
     }
 
     @GetMapping
@@ -106,6 +112,38 @@ public class MeseroController {
             return "redirect:/mesero?pagoSuccess";
         } catch (Exception e) {
             return "redirect:/mesero/pedido/ver/" + id + "?error=" + e.getMessage();
+        }
+    }
+
+    /**
+     * Genera y descarga la factura PDF del pedido usando JasperReports.
+     * URL: GET /mesero/pedido/ver/{id}/factura
+     */
+    @GetMapping("/pedido/ver/{id}/factura")
+    public void descargarFactura(@PathVariable("id") Long id,
+                                  HttpServletResponse response) {
+        Pedido pedido = pedidoService.buscarPorIdConDetalles(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado: " + id));
+        try {
+            byte[] pdfBytes = facturaJasperService.generarFacturaPdf(pedido);
+
+            response.setContentType("application/pdf");
+            // "inline" abre el PDF en el navegador; cambia a "attachment" para forzar descarga
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                    "inline; filename=\"factura_" + id + ".pdf\"");
+            response.setContentLength(pdfBytes.length);
+            response.getOutputStream().write(pdfBytes);
+            response.getOutputStream().flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                response.setContentType("text/plain;charset=UTF-8");
+                response.setStatus(500);
+                java.io.PrintWriter writer = response.getWriter();
+                writer.println("DIAGNOSTICO DE ERROR DE FACTURA (PEDIDO #" + id + "):");
+                e.printStackTrace(writer);
+                writer.flush();
+            } catch (Exception ignored) {}
         }
     }
 }

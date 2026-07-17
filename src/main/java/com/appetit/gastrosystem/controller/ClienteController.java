@@ -4,6 +4,7 @@ import com.appetit.gastrosystem.model.*;
 import com.appetit.gastrosystem.security.UsuarioDetails;
 import com.appetit.gastrosystem.services.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,15 +24,18 @@ public class ClienteController {
     private final PedidoService pedidoService;
     private final MenuService menuService;
     private final ReporteService reporteService;
+    private final FacturaJasperService facturaJasperService;
 
     public ClienteController(ReservaService reservaService,
                              PedidoService pedidoService,
                              MenuService menuService,
-                             ReporteService reporteService) {
+                             ReporteService reporteService,
+                             FacturaJasperService facturaJasperService) {
         this.reservaService = reservaService;
         this.pedidoService = pedidoService;
         this.menuService = menuService;
         this.reporteService = reporteService;
+        this.facturaJasperService = facturaJasperService;
     }
 
     @GetMapping
@@ -124,12 +128,24 @@ public class ClienteController {
     public void descargarFacturaPdf(@PathVariable("id") Long id, HttpServletResponse response) {
         Pedido pedido = pedidoService.buscarPorIdConDetalles(id)
                 .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=factura_pedido_" + id + ".pdf");
         try {
-            reporteService.generarFacturaPdf(pedido, response.getOutputStream());
+            byte[] pdfBytes = facturaJasperService.generarFacturaPdf(pedido);
+            response.setContentType("application/pdf");
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                    "inline; filename=\"factura_" + id + ".pdf\"");
+            response.setContentLength(pdfBytes.length);
+            response.getOutputStream().write(pdfBytes);
+            response.getOutputStream().flush();
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                response.setContentType("text/plain;charset=UTF-8");
+                response.setStatus(500);
+                java.io.PrintWriter writer = response.getWriter();
+                writer.println("DIAGNOSTICO DE ERROR DE FACTURA (PEDIDO #" + id + "):");
+                e.printStackTrace(writer);
+                writer.flush();
+            } catch (Exception ignored) {}
         }
     }
 

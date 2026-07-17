@@ -109,6 +109,8 @@ public class Plato {
             return "/img/alitas.jpeg";
         } else if (nombreNormalizado.contains("brownie")) {
             return "/img/brownieconhelado.jpg";
+        } else if (nombreNormalizado.contains("chaparrita")) {
+            return "/img/chaparritas.jfif";
         } else if (nombreNormalizado.contains("vino")) {
             return "/img/copavino.jpg";
         } else if (nombreNormalizado.contains("dedo")) {

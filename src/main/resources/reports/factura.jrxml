@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a1b2c3d4-e5f6-7890-abcd-ef1234567890">
+	<style name="StyleTitulo" forecolor="#1A1A2E" fontName="SansSerif" fontSize="22" isBold="true"/>
+	<style name="StyleSubtitulo" forecolor="#888888" fontName="SansSerif" fontSize="9"/>
+	<style name="StyleSectionLabel" forecolor="#1A1A2E" fontName="SansSerif" fontSize="10" isBold="true"/>
+	<style name="StyleLabel" forecolor="#333333" fontName="SansSerif" fontSize="9" isBold="true"/>
+	<style name="StyleValue" forecolor="#222222" fontName="SansSerif" fontSize="9"/>
+	<style name="StyleTableHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#2B2D42" fontName="SansSerif" fontSize="9" isBold="true"/>
+	<style name="StyleTableRow" forecolor="#222222" fontName="SansSerif" fontSize="9"/>
+	<style name="StyleTotal" forecolor="#2B2D42" fontName="SansSerif" fontSize="11" isBold="true"/>
+	<style name="StyleFooter" forecolor="#888888" fontName="SansSerif" fontSize="8"/>
+	<parameter name="P_FACTURA_NUM" class="java.lang.Long"/>
+	<parameter name="P_FECHA" class="java.lang.String"/>
+	<parameter name="P_TIPO_PEDIDO" class="java.lang.String"/>
+	<parameter name="P_CLIENTE_NOMBRE" class="java.lang.String"/>
+	<parameter name="P_CLIENTE_EMAIL" class="java.lang.String"/>
+	<parameter name="P_CLIENTE_TEL" class="java.lang.String"/>
+	<parameter name="P_MESA" class="java.lang.String"/>
+	<parameter name="P_DIRECCION" class="java.lang.String"/>
+	<parameter name="P_METODO_PAGO" class="java.lang.String"/>
+	<parameter name="P_TOTAL" class="java.math.BigDecimal"/>
+	<parameter name="P_ESTADO" class="java.lang.String"/>
+	<field name="nombrePlato" class="java.lang.String"/>
+	<field name="cantidad" class="java.lang.Integer"/>
+	<field name="precioUnitario" class="java.math.BigDecimal"/>
+	<field name="subtotal" class="java.math.BigDecimal"/>
+	<variable name="TOTAL_ACUM" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtotal}]]></variableExpression>
+		<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
+	</variable>
+	<title>
+		<band height="140" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="6" forecolor="#2B2D42" backcolor="#2B2D42" uuid="11111111-1111-1111-1111-111111111101"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement style="StyleTitulo" x="0" y="14" width="300" height="30" uuid="11111111-1111-1111-1111-111111111102"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["GastroSystem"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="StyleSubtitulo" x="0" y="46" width="300" height="13" uuid="11111111-1111-1111-1111-111111111103"/>
+				<text><![CDATA[Restaurante & Delivery  ·  NIT: 900.123.456-7]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="StyleSubtitulo" x="0" y="60" width="300" height="13" uuid="11111111-1111-1111-1111-111111111104"/>
+				<text><![CDATA[Calle del Sabor #123, GastroCiudad  ·  Tel: (601) 555-0199]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="StyleTitulo" x="370" y="14" width="185" height="25" uuid="11111111-1111-1111-1111-111111111105"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[FACTURA]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="StyleSectionLabel" x="370" y="42" width="185" height="13" uuid="11111111-1111-1111-1111-111111111106"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["N\u00b0: " + $P{P_FACTURA_NUM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="StyleSubtitulo" x="370" y="57" width="185" height="13" uuid="11111111-1111-1111-1111-111111111107"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Fecha: " + $P{P_FECHA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="StyleSubtitulo" x="370" y="71" width="185" height="13" uuid="11111111-1111-1111-1111-111111111108"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Tipo: " + $P{P_TIPO_PEDIDO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="90" width="555" height="1" forecolor="#CCCCCC" uuid="11111111-1111-1111-1111-111111111109"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="StyleSectionLabel" x="0" y="98" width="270" height="14" uuid="11111111-1111-1111-1111-111111111110"/>
+				<text><![CDATA[CLIENTE]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement style="StyleValue" x="0" y="113" width="270" height="13" uuid="11111111-1111-1111-1111-111111111111"/>
+				<textFieldExpression><![CDATA[$P{P_CLIENTE_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="StyleSubtitulo" x="0" y="127" width="270" height="13" uuid="11111111-1111-1111-1111-111111111112"/>
+				<textFieldExpression><![CDATA[$P{P_CLIENTE_EMAIL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="StyleSectionLabel" x="285" y="98" width="270" height="14" uuid="11111111-1111-1111-1111-111111111113"/>
+				<text><![CDATA[ENTREGA / UBICACI\u00d3N]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement style="StyleValue" x="285" y="113" width="270" height="13" uuid="11111111-1111-1111-1111-111111111114"/>
+				<textFieldExpression><![CDATA[($P{P_MESA} != null && !$P{P_MESA}.isEmpty())
+                    ? "Mesa N\u00b0: " + $P{P_MESA}
+                    : ($P{P_DIRECCION} != null ? $P{P_DIRECCION} : "")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="StyleSubtitulo" x="285" y="127" width="270" height="13" uuid="11111111-1111-1111-1111-111111111115"/>
+				<textFieldExpression><![CDATA[($P{P_CLIENTE_TEL} != null && !$P{P_CLIENTE_TEL}.isEmpty())
+                    ? "Tel: " + $P{P_CLIENTE_TEL} : ""]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement style="StyleTableHeader" x="0" y="0" width="230" height="24" uuid="22222222-2222-2222-2222-222222222201"/>
+				<box topPadding="5" leftPadding="8"/>
+				<text><![CDATA[PLATO / DESCRIPCI\u00d3N]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="StyleTableHeader" x="230" y="0" width="110" height="24" uuid="22222222-2222-2222-2222-222222222202"/>
+				<box topPadding="5"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[PRECIO UNIT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="StyleTableHeader" x="340" y="0" width="75" height="24" uuid="22222222-2222-2222-2222-222222222203"/>
+				<box topPadding="5"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[CANT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="StyleTableHeader" x="415" y="0" width="140" height="24" uuid="22222222-2222-2222-2222-222222222204"/>
+				<box topPadding="5" rightPadding="8"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[SUBTOTAL]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="22" forecolor="#F4F4F8" backcolor="#F4F4F8" uuid="33333333-3333-3333-3333-333333333301">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement style="StyleTableRow" x="0" y="0" width="230" height="22" uuid="33333333-3333-3333-3333-333333333302"/>
+				<box topPadding="4" leftPadding="8" bottomPadding="4"/>
+				<textFieldExpression><![CDATA[$F{nombrePlato}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement style="StyleTableRow" x="230" y="0" width="110" height="22" uuid="33333333-3333-3333-3333-333333333303"/>
+				<box topPadding="4" bottomPadding="4"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="StyleTableRow" x="340" y="0" width="75" height="22" uuid="33333333-3333-3333-3333-333333333304"/>
+				<box topPadding="4" bottomPadding="4"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement style="StyleTableRow" x="415" y="0" width="140" height="22" uuid="33333333-3333-3333-3333-333333333305"/>
+				<box topPadding="4" bottomPadding="4" rightPadding="8"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{subtotal}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="21" width="555" height="1" forecolor="#E0E0E0" uuid="33333333-3333-3333-3333-333333333306"/>
+				<graphicElement>
+					<pen lineWidth="0.3"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<summary>
+		<band height="160" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="5" width="555" height="1" forecolor="#2B2D42" uuid="44444444-4444-4444-4444-444444444401"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="StyleTotal" x="355" y="14" width="100" height="20" uuid="44444444-4444-4444-4444-444444444402"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<textField pattern="$ #,##0.00">
+				<reportElement style="StyleTotal" x="455" y="14" width="100" height="20" uuid="44444444-4444-4444-4444-444444444403"/>
+				<box rightPadding="8"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{P_TOTAL}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="355" y="36" width="200" height="1" forecolor="#2B2D42" uuid="44444444-4444-4444-4444-444444444404"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="StyleLabel" x="0" y="45" width="120" height="14" uuid="44444444-4444-4444-4444-444444444405"/>
+				<text><![CDATA[M\u00e9todo de Pago:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement style="StyleValue" x="125" y="45" width="200" height="14" uuid="44444444-4444-4444-4444-444444444406"/>
+				<textFieldExpression><![CDATA[$P{P_METODO_PAGO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="StyleLabel" x="0" y="62" width="120" height="14" uuid="44444444-4444-4444-4444-444444444407"/>
+				<text><![CDATA[Estado Pedido:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement style="StyleValue" x="125" y="62" width="200" height="14" uuid="44444444-4444-4444-4444-444444444408"/>
+				<textFieldExpression><![CDATA[$P{P_ESTADO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="88" width="555" height="1" forecolor="#CCCCCC" uuid="44444444-4444-4444-4444-444444444409"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="StyleSectionLabel" x="0" y="100" width="555" height="18" uuid="44444444-4444-4444-4444-444444444410"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[!Gracias por su preferencia!]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="StyleFooter" x="0" y="120" width="555" height="13" uuid="44444444-4444-4444-4444-444444444411"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Este documento es la constancia de su pedido en GastroSystem.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="StyleFooter" x="0" y="134" width="555" height="13" uuid="44444444-4444-4444-4444-444444444412"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Calle del Sabor #123, GastroCiudad  ·  Tel: (601) 555-0199  ·  info@gastrosystem.co]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="150" width="555" height="6" forecolor="#2B2D42" backcolor="#2B2D42" uuid="44444444-4444-4444-4444-444444444413"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+		</band>
+	</summary>
+</jasperReport>

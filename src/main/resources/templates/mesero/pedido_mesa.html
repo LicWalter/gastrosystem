@@ -148,10 +148,26 @@
                         </div>
                     </form>
                 </div>
+
+                <!-- ── Factura PDF (solo cuando el pedido está PAGADO) ── -->
+                <div th:if="${#strings.toString(pedido.estado) == 'PAGADO'}"
+                     class="card p-4 border-0 bg-light rounded-4 mt-4 text-center">
+                    <p class="text-success fw-semibold mb-3">
+                        ✅ Pago registrado correctamente.
+                    </p>
+                    <a th:href="@{/mesero/pedido/ver/{id}/factura(id=${pedido.idPedido})}"
+                       class="btn btn-outline-dark px-5 py-2"
+                       target="_blank"
+                       id="btn-descargar-factura">
+                        🧾 Ver / Descargar Factura PDF
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
